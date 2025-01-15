@@ -1,1 +1,62 @@
-{"content": "IyMNCiMgRGVmaW5lIHRoZSBsaWNlbnNlIFNLVSBmb3IgVGVhbXMgQXVkaW8gQ29uZmVyZW5jaW5nDQojIyMNCiRUZWFtc0F1ZGlvQ29uZmVyZW5jaW5nU2t1SWQgPSBcImM3ZGYyNzYwLTJjODEtNGVmNy1iNTc4LTViNTM5MmI1NzFkZlwiICMgVXBkYXRlIHRoaXMgd2l0aCB5b3VyIGFjdHVhbCBTS1UgSUQNClVwZGF0ZS1NZ1VzZXIiDQokbm90aWZpY2F0aW9uUGFyYW1zID0gQHsNCiAgICBub3RpZmljYXRpb25TZXR0aW5ncyA9IEB7DQogICAgICAgIG5vdGlmaWNhdGlvbnMgPSBAKA0KICAgICAgICAgICAgQHsNCiAgICAgICAgICAgICAgICBub3RpZmljYXRpb25UeXBlID0gIkxpY2Vuc2VBc3NpZ25tZW50Ig0KICAgICAgICAgICAgICAgIGVuYWJsZWQgPSAkZmFsc2UNCiAgICAgICAgICAgIH0NCiAgICAgICAgKQ0KICAgIH0NCn0NCg0KIyBQcm9jZXNzIGVhY2ggdXNlcg0KZm9yZWFjaCAoJFVzZXIgaW4gJFVzZXJzKSB7DQogICAgdHJ5IHsNCiAgICAgICAgIyBTZXQgdXNlciBub3RpZmljYXRpb24gc2V0dGluZ3MgdG8gZGlzYWJsZSBlbWFpbHMNCiAgICAgICAgVXBkYXRlLU1nVXNlciAtVXNlcklkICRVc2VyLklkIC1Cb2R5UGFyYW1ldGVyICRub3RpZmljYXRpb25QYXJhbXMNCg0KICAgICAgICAjIEFzc2lnbiB0aGUgbGljZW5zZQ0KICAgICAgICBTZXQtTWdVc2VyTGljZW5zZSAtVXNlcklkICRVc2VyLklkIC1Cb2R5UGFyYW1ldGVyICRMaWNlbnNlUGFyYW1zDQoNCiAgICAgICAgV3JpdGUtSG9zdCAiU3VjY2Vzc2Z1bGx5IGFzc2lnbmVkIGxpY2Vuc2UgdG8gJCgkVXNlci5Vc2VyUHJpbmNpcGFsTmFtZSkiIC1Gb3JlZ3JvdW5kQ29sb3IgR3JlZW4NCiAgICB9DQogICAgY2F0Y2ggew0KICAgICAgICBXcml0ZS1Ib3N0ICJGYWlsZWQgdG8gYXNzaWduIGxpY2Vuc2UgdG8gJCgkVXNlci5Vc2VyUHJpbmNpcGFsTmFtZSk6ICQoJF8uRXhjZXB0aW9uLk1lc3NhZ2UpIiAtRm9yZWdyb3VuZENvbG9yIFJlZA0KICAgIH0NCn0NCg0KIyBEaXNjb25uZWN0IGZyb20gTWljcm9zb2Z0IEdyYXBoDQpEaXNjb25uZWN0LU1nR3JhcGg=", "encoding": "base64"}
+<#
+.SYNOPSIS
+    Assigns Teams Audio Conferencing licenses to users without sending notification emails.
+.DESCRIPTION
+    This script connects to Microsoft 365, assigns Teams Audio Conferencing licenses to specified users,
+    and prevents the automatic sending of notification emails.
+.NOTES
+    Required Modules: Microsoft.Graph.Users, Microsoft.Graph.Users.Actions
+#>
+
+# Connect to Microsoft Graph (Make sure you have the necessary permissions)
+Connect-MgGraph -Scopes "User.ReadWrite.All", "Organization.Read.All"
+
+# Define the license SKU for Teams Audio Conferencing
+$TeamsAudioConferencingSkuId = "c7df2760-2c81-4ef7-b578-5b5392b571df" # Update this with your actual SKU ID
+
+# Get all users without the Teams Audio Conferencing license
+$Users = Get-MgUser -All | Where-Object {
+    $_.AssignedLicenses.SkuId -notcontains $TeamsAudioConferencingSkuId
+}
+
+# Create license assignment parameters
+$LicenseParams = @{
+    addLicenses = @(
+        @{
+            skuId = $TeamsAudioConferencingSkuId
+            disabledPlans = @() # No disabled plans
+        }
+    )
+    removeLicenses = @()
+}
+
+# Process each user
+foreach ($User in $Users) {
+    try {
+        # Set user notification settings to disable emails
+        $notificationParams = @{
+            notificationSettings = @{
+                notifications = @(
+                    @{
+                        notificationType = "LicenseAssignment"
+                        enabled = $false
+                    }
+                )
+            }
+        }
+        
+        # Update user notification settings
+        Update-MgUser -UserId $User.Id -BodyParameter $notificationParams
+
+        # Assign the license
+        Set-MgUserLicense -UserId $User.Id -BodyParameter $LicenseParams
+
+        Write-Host "Successfully assigned license to $($User.UserPrincipalName)" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "Failed to assign license to $($User.UserPrincipalName): $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
+# Disconnect from Microsoft Graph
+Disconnect-MgGraph

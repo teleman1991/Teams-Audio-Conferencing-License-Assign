@@ -5,3 +5,18 @@ Connect-MgGraph -Scopes "User.ReadWrite.All", "Organization.Read.All"
 
 # Define the license SKU for Teams Enterprise
 $TeamsEnterpriseSku = "6fd2c87f-b296-42f0-b197-1e91e994b900"
+
+try {
+    Write-Host "Processing user: $UserPrincipalName" -ForegroundColor Cyan
+    
+    # Get user
+    $User = Get-MgUser -Filter "userPrincipalName eq '$UserPrincipalName'"
+    
+    if ($null -eq $User) {
+        throw "User not found: $UserPrincipalName"
+    }
+
+    if ($User.AssignedLicenses.SkuId -contains $TeamsEnterpriseSku) {
+        Write-Host "User already has Teams Enterprise license." -ForegroundColor Yellow
+        exit
+    }

@@ -35,3 +35,27 @@ try {
     
     Write-Host "Disabling notifications..." -ForegroundColor Gray
     Update-MgUser -UserId $User.Id -BodyParameter $notificationParams
+
+    # Assign license
+    $LicenseParams = @{
+        addLicenses = @(
+            @{
+                skuId = $TeamsEnterpriseSku
+                disabledPlans = @()
+            }
+        )
+        removeLicenses = @()
+    }
+
+    Write-Host "Assigning Teams Enterprise license..." -ForegroundColor Gray
+    Set-MgUserLicense -UserId $User.Id -BodyParameter $LicenseParams
+
+    Write-Host "Successfully assigned license to $UserPrincipalName" -ForegroundColor Green
+}
+catch {
+    Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
+}
+finally {
+    Disconnect-MgGraph
+    Write-Host "Disconnected from Microsoft Graph" -ForegroundColor Cyan
+}

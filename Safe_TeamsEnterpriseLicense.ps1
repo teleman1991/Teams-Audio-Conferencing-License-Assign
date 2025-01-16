@@ -20,3 +20,18 @@ try {
         Write-Host "User already has Teams Enterprise license." -ForegroundColor Yellow
         exit
     }
+
+    # Disable email notifications
+    $notificationParams = @{
+        notificationSettings = @{
+            notifications = @(
+                @{
+                    notificationType = "LicenseAssignment"
+                    enabled = $false
+                }
+            )
+        }
+    }
+    
+    Write-Host "Disabling notifications..." -ForegroundColor Gray
+    Update-MgUser -UserId $User.Id -BodyParameter $notificationParams

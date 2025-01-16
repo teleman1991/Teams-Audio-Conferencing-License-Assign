@@ -1,1 +1,61 @@
-{"encoding": "base64", "content": "PHsNCi5TWU5PUFNJUw0KICAgIEFzc2lnbnMgTWljcm9zb2Z0IFRlYW1zIEVudGVycHJpc2UgbGljZW5zZSB0byBhIHNpbmdsZSB1c2VyIHdpdGhvdXQgc2VuZGluZyBub3RpZmljYXRpb24gZW1haWxzLg0KLkRFU0NSSVBUSU9ODQogICAgVGhpcyBzY3JpcHQgYXNzaWducyBhIFRlYW1zIEVudGVycHJpc2UgbGljZW5zZSB0byBhIHNwZWNpZmllZCB1c2VyIGFuZCBwcmV2ZW50cyBhdXRvbWF0aWMgbm90aWZpY2F0aW9uIGVtYWlscy4NCi5QQVJBTUVURVIgVXNlclByaW5jaXBhbE5hbWUNCiAgICBSZXF1aXJlZC4gVGhlIFVzZXJQcmluY2lwYWxOYW1lIChlbWFpbCkgb2YgdGhlIHVzZXIgdG8gbGljZW5zZS4NCi5FWEFNUExFDQogICAgLlxTYWZlX1RlYW1zRW50ZXJwcmlzZUxpY2Vuc2UucHMxIC1Vc2VyUHJpbmNpcGFsTmFtZSAidXNlckBjb250b3NvLmNvbSINCi5OT1RFUw0KICAgIFJlcXVpcmVkIE1vZHVsZXM6IE1pY3Jvc29mdC5HcmFwaC5Vc2VycywgTWljcm9zb2Z0LkdyYXBoLlVzZXJzLkFjdGlvbnMNCiM+DQoNCnBhcmFtKA0KICAgIFtQYXJhbWV0ZXIoTWFuZGF0b3J5PSR0cnVlKV0NCiAgICBbc3RyaW5nXSRVc2VyUHJpbmNpcGFsTmFtZQ0KKQ0KDQojIENvbm5lY3QgdG8gTWljcm9zb2Z0IEdyYXBoIChNYWtlIHN1cmUgeW91IGhhdmUgdGhlIG5lY2Vzc2FyeSBwZXJtaXNzaW9ucykNCkNvbm5lY3QtTWdHcmFwaCAtU2NvcGVzICJVc2VyLlJlYWRXcml0ZS5BbGwiLCAiT3JnYW5pemF0aW9uLlJlYWQuQWxsIg0KDQojIERlZmluZSB0aGUgbGljZW5zZSBTS1UgZm9yIFRlYW1zIEVudGVycHJpc2UNCiRUZWFtc0VudGVycHJpc2VTa3UgPSAiNmZkMmM4N2YtYjI5Ni00MmYwLWIxOTctMWU5MWU5OTRiOTAwIg0KDQp0cnkgew0KICAgIFdyaXRlLUhvc3QgIlByb2Nlc3NpbmcgdXNlcjogJFVzZXJQcmluY2lwYWxOYW1lIiAtRm9yZWdyb3VuZENvbG9yIEN5YW4NCiAgICANCiAgICAjIEdldCB1c2VyDQogICAgJFVzZXIgPSBHZXQtTWdVc2VyIC1GaWx0ZXIgInVzZXJQcmluY2lwYWxOYW1lIGVxICckVXNlclByaW5jaXBhbE5hbWUnIg0KICAgIA0KICAgIGlmICgkbnVsbCAtZXEgJFVzZXIpIHsNCiAgICAgICAgdGhyb3cgIlVzZXIgbm90IGZvdW5kOiAkVXNlclByaW5jaXBhbE5hbWUiDQogICAgfQ0KDQogICAgaWYgKCRVc2VyLkFzc2lnbmVkTGljZW5zZXMuU2t1SWQgLWNvbnRhaW5zICRUZWFtc0VudGVycHJpc2VTa3UpIHsNCiAgICAgICAgV3JpdGUtSG9zdCAiVXNlciBhbHJlYWR5IGhhcyBUZWFtcyBFbnRlcnByaXNlIGxpY2Vuc2UuIiAtRm9yZWdyb3VuZENvbG9yIFllbGxvdw0KICAgICAgICBleGl0DQogICAgfQ0KDQogICAgIyBTZXQgdXNlciBub3RpZmljYXRpb24gc2V0dGluZ3MgdG8gZGlzYWJsZSBlbWFpbHMNCiAgICAkbm90aWZpY2F0aW9uUGFyYW1zID0gQHsNCiAgICAgICAgbm90aWZpY2F0aW9uU2V0dGluZ3MgPSBAew0KICAgICAgICAgICAgbm90aWZpY2F0aW9ucyA9IEAoDQogICAgICAgICAgICAgICAgQHsNCiAgICAgICAgICAgICAgICAgICAgbm90aWZpY2F0aW9uVHlwZSA9ICJMaWNlbnNlQXNzaWdubWVudCINCiAgICAgICAgICAgICAgICAgICAgZW5hYmxlZCA9ICRmYWxzZQ0KICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICkNCiAgICAgICAgfQ0KICAgIH0NCiAgICANCiAgICAjIFVwZGF0ZSB1c2VyIG5vdGlmaWNhdGlvbiBzZXR0aW5ncw0KICAgIFdyaXRlLUhvc3QgIkRpc2FibGluZyBsaWNlbnNlIGFzc2lnbm1lbnQgbm90aWZpY2F0aW9ucy4uLiIgLUZvcmVncm91bmRDb2xvciBHcmF5DQogICAgVXBkYXRlLU1nVXNlciAtVXNlcklkICRVc2VyLklkIC1Cb2R5UGFyYW1ldGVyICRub3RpZmljYXRpb25QYXJhbXMNCg0KICAgICMgQ3JlYXRlIGxpY2Vuc2UgYXNzaWdubWVudCBwYXJhbWV0ZXJzDQogICAgJExpY2Vuc2VQYXJhbXMgPSBAew0KICAgICAgICBhZGRMaWNlbnNlcyA9IEAoDQogICAgICAgICAgICBAew0KICAgICAgICAgICAgICAgIHNrdUlkID0gJFRlYW1zRW50ZXJwcmlzZVNrdQ0KICAgICAgICAgICAgICAgIGRpc2FibGVkUGxhbnMgPSBAKCkgIyBObyBkaXNhYmxlZCBwbGFucw0KICAgICAgICAgICAgfQ0KICAgICAgICApDQogICAgICAgIHJlbW92ZUxpY2Vuc2VzID0gQCgpDQogICAgfQ0KDQogICAgIyBBc3NpZ24gdGhlIGxpY2Vuc2UNCiAgICBXcml0ZS1Ib3N0ICJBc3NpZ25pbmcgVGVhbXMgRW50ZXJwcmlzZSBsaWNlbnNlLi4uIiAtRm9yZWdyb3VuZENvbG9yIEdyYXkNCiAgICBTZXQtTWdVc2VyTGljZW5zZSAtVXNlcklkICRVc2VyLklkIC1Cb2R5UGFyYW1ldGVyICRMaWNlbnNlUGFyYW1zDQoNCiAgICBXcml0ZS1Ib3N0ICJTdWNjZXNzZnVsbHkgYXNzaWduZWQgbGljZW5zZSB0byAkVXNlclByaW5jaXBhbE5hbWUiIC1Gb3JlZ3JvdW5kQ29sb3IgR3JlZW4NCn0NCmNhdGNoIHsNCiAgICBXcml0ZS1Ib3N0ICJFcnJvcjogJCgkXy5FeGNlcHRpb24uTWVzc2FnZSkiIC1Gb3JlZ3JvdW5kQ29sb3IgUmVkDQp9DQpmaW5hbGx5IHsNCiAgICAjIERpc2Nvbm5lY3QgZnJvbSBNaWNyb3NvZnQgR3JhcGgNCiAgICBEaXNjb25uZWN0LU1nR3JhcGgNCiAgICBXcml0ZS1Ib3N0ICJEaXNjb25uZWN0ZWQgZnJvbSBNaWNyb3NvZnQgR3JhcGgiIC1Gb3JlZ3JvdW5kQ29sb3IgQ3lhbg0KfQ=="}
+param([Parameter(Mandatory=$true)][string]$UserPrincipalName)
+
+# Connect to Microsoft Graph
+Connect-MgGraph -Scopes "User.ReadWrite.All", "Organization.Read.All"
+
+# Define the license SKU for Teams Enterprise
+$TeamsEnterpriseSku = "6fd2c87f-b296-42f0-b197-1e91e994b900"
+
+try {
+    Write-Host "Processing user: $UserPrincipalName" -ForegroundColor Cyan
+    
+    # Get user
+    $User = Get-MgUser -Filter "userPrincipalName eq '$UserPrincipalName'"
+    
+    if ($null -eq $User) {
+        throw "User not found: $UserPrincipalName"
+    }
+
+    if ($User.AssignedLicenses.SkuId -contains $TeamsEnterpriseSku) {
+        Write-Host "User already has Teams Enterprise license." -ForegroundColor Yellow
+        exit
+    }
+
+    # Disable email notifications
+    $notificationParams = @{
+        notificationSettings = @{
+            notifications = @(
+                @{
+                    notificationType = "LicenseAssignment"
+                    enabled = $false
+                }
+            )
+        }
+    }
+    
+    Write-Host "Disabling notifications..." -ForegroundColor Gray
+    Update-MgUser -UserId $User.Id -BodyParameter $notificationParams
+
+    # Assign license
+    $LicenseParams = @{
+        addLicenses = @(
+            @{
+                skuId = $TeamsEnterpriseSku
+                disabledPlans = @()
+            }
+        )
+        removeLicenses = @()
+    }
+
+    Write-Host "Assigning Teams Enterprise license..." -ForegroundColor Gray
+    Set-MgUserLicense -UserId $User.Id -BodyParameter $LicenseParams
+
+    Write-Host "Successfully assigned license to $UserPrincipalName" -ForegroundColor Green
+}
+catch {
+    Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
+}
+finally {
+    Disconnect-MgGraph
+    Write-Host "Disconnected from Microsoft Graph" -ForegroundColor Cyan
+}

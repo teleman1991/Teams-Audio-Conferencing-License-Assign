@@ -1,62 +1,72 @@
-<#
-.SYNOPSIS
-    Assigns Microsoft Teams Enterprise licenses to users without sending notification emails.
-.DESCRIPTION
-    This script connects to Microsoft 365, assigns Teams Enterprise licenses to specified users,
-    and prevents the automatic sending of notification emails.
-.NOTES
-    Required Modules: Microsoft.Graph.Users, Microsoft.Graph.Users.Actions
-#>
+param([Parameter(Mandatory=$true)][string]$UserPrincipalName)
 
-# Connect to Microsoft Graph (Make sure you have the necessary permissions)
+# Connect to Microsoft Graph
 Connect-MgGraph -Scopes "User.ReadWrite.All", "Organization.Read.All"
 
 # Define the license SKU for Teams Enterprise
-$TeamsEnterpriseSku = "6fd2c87f-b296-42f0-b197-1e91e994b900" # Teams Enterprise SKU ID
+$TeamsEnterpriseSku = "7e31c0d9-9551-471d-836f-32ee72be4a01" # Teams Enterprise SKU ID
 
-# Get all users without the Teams Enterprise license
-$Users = Get-MgUser -All | Where-Object {
-    $_.AssignedLicenses.SkuId -notcontains $TeamsEnterpriseSku
-}
+try {
+    Write-Host "Processing user: $UserPrincipalName" -ForegroundColor Cyan
+    
+    # Get user
+    $User = Get-MgUser -Filter "userPrincipalName eq '$UserPrincipalName'" -Property Id, UserPrincipalName, AssignedLicenses
+    
+    if ($null -eq $User) {
+        throw "User not found: $UserPrincipalName"
+    }
 
-# Create license assignment parameters
-$LicenseParams = @{
-    addLicenses = @(
-        @{
-            skuId = $TeamsEnterpriseSku
-            disabledPlans = @() # No disabled plans
-        }
-    )
-    removeLicenses = @()
-}
+    # Check available licenses
+    $availableLicenses = Get-MgSubscribedSku | Where-Object { $_.SkuId -eq $TeamsEnterpriseSku }
+    if ($null -eq $availableLicenses) {
+        throw "License SKU not found in tenant. Please verify the SKU ID."
+    }
 
-# Process each user
-foreach ($User in $Users) {
-    try {
-        # Set user notification settings to disable emails
-        $notificationParams = @{
-            notificationSettings = @{
-                notifications = @(
-                    @{
-                        notificationType = "LicenseAssignment"
-                        enabled = $false
-                    }
-                )
+    $availableCount = $availableLicenses.PrepaidUnits.Enabled - $availableLicenses.ConsumedUnits
+    Write-Host "Available licenses: $availableCount" -ForegroundColor Cyan
+
+    if ($availableCount -lt 1) {
+        throw "No available licenses. Please check your license quota."
+    }
+
+    if ($User.AssignedLicenses.SkuId -contains $TeamsEnterpriseSku) {
+        Write-Host "User already has Teams Enterprise license." -ForegroundColor Yellow
+        exit
+    }
+
+    # Create license assignment parameters
+    $LicenseParams = @{
+        addLicenses = @(
+            @{
+                skuId = $TeamsEnterpriseSku
+                disabledPlans = @()
             }
-        }
-        
-        # Update user notification settings
-        Update-MgUser -UserId $User.Id -BodyParameter $notificationParams
-
-        # Assign the license
-        Set-MgUserLicense -UserId $User.Id -BodyParameter $LicenseParams
-
-        Write-Host "Successfully assigned Teams Enterprise license to $($User.UserPrincipalName)" -ForegroundColor Green
+        )
+        removeLicenses = @()
     }
-    catch {
-        Write-Host "Failed to assign license to $($User.UserPrincipalName): $($_.Exception.Message)" -ForegroundColor Red
+
+    Write-Host "Assigning Teams Enterprise license..." -ForegroundColor Gray
+    Set-MgUserLicense -UserId $User.Id -BodyParameter $LicenseParams
+
+    # Verify the license was assigned
+    Start-Sleep -Seconds 5 # Give time for license to propagate
+    $updatedUser = Get-MgUser -UserId $User.Id -Property AssignedLicenses
+    
+    if ($updatedUser.AssignedLicenses.SkuId -contains $TeamsEnterpriseSku) {
+        Write-Host "Successfully verified license assignment to $UserPrincipalName" -ForegroundColor Green
+    } else {
+        Write-Host "Warning: License assignment could not be verified. Please check manually." -ForegroundColor Yellow
+        Write-Host "Current licenses:" -ForegroundColor Yellow
+        $updatedUser.AssignedLicenses.SkuId | ForEach-Object {
+            Write-Host "  $_" -ForegroundColor Yellow
+        }
     }
 }
-
-# Disconnect from Microsoft Graph
-Disconnect-MgGraph
+catch {
+    Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "Full Error Details: $($_)" -ForegroundColor Red
+}
+finally {
+    Disconnect-MgGraph
+    Write-Host "Disconnected from Microsoft Graph" -ForegroundColor Cyan
+}

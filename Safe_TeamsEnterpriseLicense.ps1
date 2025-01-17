@@ -4,7 +4,7 @@ param([Parameter(Mandatory=$true)][string]$UserPrincipalName)
 Connect-MgGraph -Scopes "User.ReadWrite.All", "Organization.Read.All"
 
 # Define the license SKU for Teams Enterprise
-$TeamsEnterpriseSku = "57ff2da0-773e-42df-b2af-ffb7a2317929"
+$TeamsEnterpriseSku = "57ff2da0-773e-42df-b2af-ffb7a2317929" # Teams Enterprise SKU ID
 
 try {
     Write-Host "Processing user: $UserPrincipalName" -ForegroundColor Cyan
@@ -21,22 +21,7 @@ try {
         exit
     }
 
-    # Disable email notifications
-    $notificationParams = @{
-        notificationSettings = @{
-            notifications = @(
-                @{
-                    notificationType = "LicenseAssignment"
-                    enabled = $false
-                }
-            )
-        }
-    }
-    
-    Write-Host "Disabling notifications..." -ForegroundColor Gray
-    Update-MgUser -UserId $User.Id -BodyParameter $notificationParams
-
-    # Assign license
+    # Create license assignment parameters
     $LicenseParams = @{
         addLicenses = @(
             @{

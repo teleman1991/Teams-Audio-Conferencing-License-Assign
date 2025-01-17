@@ -4,7 +4,7 @@ param([Parameter(Mandatory=$true)][string]$UserPrincipalName)
 Connect-MgGraph -Scopes "User.ReadWrite.All", "Organization.Read.All"
 
 # Define the license SKU for Teams Enterprise
-$TeamsEnterpriseSku = "18a4bd3f-0b5b-4887-b04f-61dd0ee15f5e" # Teams Enterprise SKU ID
+$TeamsEnterpriseSku = "7e31c0d9-9551-471d-836f-32ee72be4a01" # Teams Enterprise SKU ID
 
 try {
     Write-Host "Processing user: $UserPrincipalName" -ForegroundColor Cyan

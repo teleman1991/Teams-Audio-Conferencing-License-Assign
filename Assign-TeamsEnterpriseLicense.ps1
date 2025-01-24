@@ -34,6 +34,21 @@ try {
             continue
         }
 
+        # Disable email notifications
+        $notificationParams = @{
+            notificationSettings = @{
+                notifications = @(
+                    @{
+                        notificationType = "LicenseAssignment"
+                        enabled = $false
+                    }
+                )
+            }
+        }
+        
+        Write-Host "Disabling notifications..." -ForegroundColor Gray
+        Update-MgUser -UserId $User.Id -BodyParameter $notificationParams
+        
         # Create license assignment parameters
         $LicenseParams = @{
             addLicenses = @(

@@ -1,72 +1,68 @@
-param([Parameter(Mandatory=$true)][string]$UserPrincipalName)
+# Define the license SKUs
+$TeamsEnterpriseSku = "7e31c0d9-9551-471d-836f-32ee72be4a01" # Teams Enterprise
+$E3Sku = "05e9a617-0261-4cee-bb44-138d3ef5d965" # E3 License
 
 # Connect to Microsoft Graph
 Connect-MgGraph -Scopes "User.ReadWrite.All", "Organization.Read.All"
 
-# Define the license SKU for Teams Enterprise
-$TeamsEnterpriseSku = "7e31c0d9-9551-471d-836f-32ee72be4a01" # Teams Enterprise SKU ID
-
 try {
-    Write-Host "Processing user: $UserPrincipalName" -ForegroundColor Cyan
-    
-    # Get user
-    $User = Get-MgUser -Filter "userPrincipalName eq '$UserPrincipalName'" -Property Id, UserPrincipalName, AssignedLicenses
-    
-    if ($null -eq $User) {
-        throw "User not found: $UserPrincipalName"
-    }
-
-    # Check available licenses
+    # Check available Teams Enterprise licenses
     $availableLicenses = Get-MgSubscribedSku | Where-Object { $_.SkuId -eq $TeamsEnterpriseSku }
     if ($null -eq $availableLicenses) {
-        throw "License SKU not found in tenant. Please verify the SKU ID."
+        throw "Teams Enterprise SKU not found in tenant."
     }
 
     $availableCount = $availableLicenses.PrepaidUnits.Enabled - $availableLicenses.ConsumedUnits
-    Write-Host "Available licenses: $availableCount" -ForegroundColor Cyan
+    Write-Host "Available Teams Enterprise licenses: $availableCount" -ForegroundColor Cyan
 
     if ($availableCount -lt 1) {
-        throw "No available licenses. Please check your license quota."
+        throw "No available Teams Enterprise licenses."
     }
 
-    if ($User.AssignedLicenses.SkuId -contains $TeamsEnterpriseSku) {
-        Write-Host "User already has Teams Enterprise license." -ForegroundColor Yellow
-        exit
-    }
+    # Get all users with E3 license
+    Write-Host "Finding users with E3 licenses..." -ForegroundColor Cyan
+    $E3Users = Get-MgUser -All -Property Id, UserPrincipalName, AssignedLicenses | 
+               Where-Object { $_.AssignedLicenses.SkuId -contains $E3Sku }
 
-    # Create license assignment parameters
-    $LicenseParams = @{
-        addLicenses = @(
-            @{
-                skuId = $TeamsEnterpriseSku
-                disabledPlans = @()
-            }
-        )
-        removeLicenses = @()
-    }
+    Write-Host "Found $($E3Users.Count) users with E3 licenses" -ForegroundColor Cyan
 
-    Write-Host "Assigning Teams Enterprise license..." -ForegroundColor Gray
-    Set-MgUserLicense -UserId $User.Id -BodyParameter $LicenseParams
+    foreach ($User in $E3Users) {
+        Write-Host "\nProcessing user: $($User.UserPrincipalName)" -ForegroundColor Cyan
 
-    # Verify the license was assigned
-    Start-Sleep -Seconds 5 # Give time for license to propagate
-    $updatedUser = Get-MgUser -UserId $User.Id -Property AssignedLicenses
-    
-    if ($updatedUser.AssignedLicenses.SkuId -contains $TeamsEnterpriseSku) {
-        Write-Host "Successfully verified license assignment to $UserPrincipalName" -ForegroundColor Green
-    } else {
-        Write-Host "Warning: License assignment could not be verified. Please check manually." -ForegroundColor Yellow
-        Write-Host "Current licenses:" -ForegroundColor Yellow
-        $updatedUser.AssignedLicenses.SkuId | ForEach-Object {
-            Write-Host "  $_" -ForegroundColor Yellow
+        if ($User.AssignedLicenses.SkuId -contains $TeamsEnterpriseSku) {
+            Write-Host "User already has Teams Enterprise license." -ForegroundColor Yellow
+            continue
+        }
+
+        # Create license assignment parameters
+        $LicenseParams = @{
+            addLicenses = @(
+                @{
+                    skuId = $TeamsEnterpriseSku
+                    disabledPlans = @()
+                }
+            )
+            removeLicenses = @()
+        }
+
+        Write-Host "Assigning Teams Enterprise license..." -ForegroundColor Gray
+        Set-MgUserLicense -UserId $User.Id -BodyParameter $LicenseParams
+
+        # Verify the license was assigned
+        Start-Sleep -Seconds 2
+        $updatedUser = Get-MgUser -UserId $User.Id -Property AssignedLicenses
+        
+        if ($updatedUser.AssignedLicenses.SkuId -contains $TeamsEnterpriseSku) {
+            Write-Host "Successfully verified license assignment" -ForegroundColor Green
+        } else {
+            Write-Host "Warning: License assignment could not be verified" -ForegroundColor Yellow
         }
     }
 }
 catch {
     Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host "Full Error Details: $($_)" -ForegroundColor Red
 }
 finally {
     Disconnect-MgGraph
-    Write-Host "Disconnected from Microsoft Graph" -ForegroundColor Cyan
+    Write-Host "\nDisconnected from Microsoft Graph" -ForegroundColor Cyan
 }
